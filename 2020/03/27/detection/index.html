@@ -20,18 +20,18 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="AboutI am currently a junior undergraduate student at College of Computer Science and Technology of Zhejiang University, China.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="About Me">
-<meta property="og:url" content="http://yoursite.com/about/index.html">
+  <meta name="description" content="Learning note for CS231n Lecture 11">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Detection and Segmentation">
+<meta property="og:url" content="http://yoursite.com/2020/03/27/detection/index.html">
 <meta property="og:site_name" content="DIANE T. LI&#39;S SITE">
-<meta property="og:description" content="AboutI am currently a junior undergraduate student at College of Computer Science and Technology of Zhejiang University, China.">
-<meta property="article:published_time" content="2020-02-23T08:27:35.000Z">
-<meta property="article:modified_time" content="2020-03-27T01:07:57.696Z">
+<meta property="og:description" content="Learning note for CS231n Lecture 11">
+<meta property="article:published_time" content="2020-03-27T02:18:02.000Z">
+<meta property="article:modified_time" content="2020-03-27T02:20:48.729Z">
 <meta property="article:author" content="Diane T. Li">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/about/">
+<link rel="canonical" href="http://yoursite.com/2020/03/27/detection/">
 
 
 <script id="page-configurations">
@@ -39,12 +39,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false
+    isPost: true
   };
 </script>
 
-  <title>About Me | DIANE T. LI'S SITE
-  </title>
+  <title>Detection and Segmentation | DIANE T. LI'S SITE</title>
   
 
 
@@ -148,45 +147,135 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
           <div class="content">
             
 
   <div class="posts-expand">
-    
-    
-    
-    <div class="post-block" lang="zh-Hans">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/detection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Diane T. Li">
+      <meta itemprop="description" content="Alone but not lonely">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DIANE T. LI'S SITE">
+    </span>
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Detection and Segmentation
+        </h1>
 
-<h1 class="post-title" itemprop="name headline">About Me
-</h1>
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
 
-<div class="post-meta">
+              <time title="Created: 2020-03-27 10:18:02 / Modified: 10:20:48" itemprop="dateCreated datePublished" datetime="2020-03-27T10:18:02+08:00">2020-03-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Computer-Vision/" itemprop="url" rel="index">
+                    <span itemprop="name">Computer Vision</span>
+                  </a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CS231n/" itemprop="url" rel="index">
+                    <span itemprop="name">CS231n</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">Learning note for CS231n Lecture 11</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="Semantic-Segmentation"><a href="#Semantic-Segmentation" class="headerlink" title="Semantic Segmentation"></a>Semantic Segmentation</h3><ul>
+<li>goal: produce a category label for each <strong>pixel</strong> of the input image</li>
+<li>shortcoming: can’t differentiate instances</li>
+</ul>
+<h5 id="Sliding-window"><a href="#Sliding-window" class="headerlink" title="Sliding window"></a>Sliding window</h5><p>small crops then classify them independently  -&gt; expensive</p>
+<h5 id="Fully-convolutional"><a href="#Fully-convolutional" class="headerlink" title="Fully convolutional"></a>Fully convolutional</h5><p>with trick of  downsampling and upsampling inside the network</p>
+<p>​    downsampling： pooling or strided convolutions </p>
+<p>​    upsampling: unpooling (Max unpooling &amp; filling with zeros &amp; duplicating)</p>
+<h3 id="Classification-Localization"><a href="#Classification-Localization" class="headerlink" title="Classification + Localization"></a>Classification + Localization</h3><ul>
+<li>we know ahead of time that there is one object in the image and we should draw a bounding box</li>
+<li>another fully connected layer to provide parameters of bounding box, with hyperparameters to wight two different loss. </li>
+<li>Why not separate? Works better Often be a pre-trained network. </li>
+</ul>
+<h3 id="Object-detection"><a href="#Object-detection" class="headerlink" title="Object detection"></a>Object detection</h3><ul>
+<li>don’t know how many objects in the image and there is not a fixed number of outputs</li>
+</ul>
+<h5 id="Sliding-window-1"><a href="#Sliding-window-1" class="headerlink" title="Sliding window"></a>Sliding window</h5><p>Question: How to choose crops?</p>
+<p>Answer: <strong>Region Proposals</strong> </p>
+<table>
+<thead>
+<tr>
+<th>R-CNN</th>
+<th>Fast R-CNN</th>
+<th>Faster R-CNN</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Convolution on each ROI</td>
+<td>Share convolutional layer (parallel with proposal</td>
+<td>RPN using the output of convolutional layer</td>
+</tr>
+</tbody></table>
+<p><strong>Without Proposals</strong></p>
+<ul>
+<li>YOLO</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/27/RCNN/" rel="prev" title="R-CNN, Fast R-CNN, Faster R-CNN">
+      <i class="fa fa-chevron-left"></i> R-CNN, Fast R-CNN, Faster R-CNN
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
-          <h2 id="About"><a href="#About" class="headerlink" title="About"></a>About</h2><p>I am currently a junior undergraduate student at <a href="http://www.en.cs.zju.edu.cn/" target="_blank" rel="noopener">College of Computer Science and Technology</a> of <a href="http://www.zju.edu.cn/english/" target="_blank" rel="noopener">Zhejiang University</a>, China. </p>
-
-      </div>
-      
-      
-      
-    </div>
-    
-
-    
-    
-    
   </div>
 
 
@@ -238,7 +327,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#About"><span class="nav-number">1.</span> <span class="nav-text">About</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Semantic-Segmentation"><span class="nav-number">1.</span> <span class="nav-text">Semantic Segmentation</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Sliding-window"><span class="nav-number">1.0.1.</span> <span class="nav-text">Sliding window</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Fully-convolutional"><span class="nav-number">1.0.2.</span> <span class="nav-text">Fully convolutional</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Classification-Localization"><span class="nav-number">2.</span> <span class="nav-text">Classification + Localization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-detection"><span class="nav-number">3.</span> <span class="nav-text">Object detection</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Sliding-window-1"><span class="nav-number">3.0.1.</span> <span class="nav-text">Sliding window</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
